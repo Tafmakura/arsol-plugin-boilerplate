@@ -41,7 +41,7 @@ class Autoloader {
         $class = strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $class));
 
         // Build file path
-        $file = ARSOL_PLUGIN_DIR . 'includes/classes/' . $class . '.php';
+        $file = ARSOL_PLUGIN_DIR . 'includes/' . $class . '.php';
 
         // Load file if it exists
         if (file_exists($file)) {
