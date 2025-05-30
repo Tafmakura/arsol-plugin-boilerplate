@@ -10,43 +10,24 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Load autoloader class
-require_once ARSOL_PLUGIN_DIR . 'includes/classes/core/class-autoloader.php';
+// Load autoloaders
+require_once ARSOL_PLUGIN_DIR . 'includes/classes/class-autoloader.php';
+require_once ARSOL_PLUGIN_DIR . 'includes/functions/functions-autoloader.php';
 
-// Initialize autoloader
 \ArsolPluginBoilerplate\Classes\Core\Autoloader::register();
 
 /**
  * Initialize plugin
  */
 function arsol_plugin_init() {
-    // Add your initialization code here
-    add_action('init', 'arsol_plugin_setup');
-}
-
-/**
- * Setup plugin
- */
-function arsol_plugin_setup() {
-    // Add your setup code here
+    // Load translations
     load_plugin_textdomain('arsol-plugin-boilerplate', false, dirname(plugin_basename(ARSOL_PLUGIN_DIR)) . '/languages');
 }
+add_action('plugins_loaded', 'arsol_plugin_init');
+
 
 /**
- * Plugin activation
+ * Plugin activation/deactivation hooks
  */
-function arsol_plugin_activate() {
-    // Add your activation code here
-    flush_rewrite_rules();
-}
-
-/**
- * Plugin deactivation
- */
-function arsol_plugin_deactivate() {
-    // Add your deactivation code here
-    flush_rewrite_rules();
-}
-
-// Load function files
-require_once ARSOL_PLUGIN_DIR . 'includes/functions/functions-autoloader.php';
+register_activation_hook(ARSOL_PLUGIN_DIR . 'arsol-plugin-boilerplate.php', 'flush_rewrite_rules');
+register_deactivation_hook(ARSOL_PLUGIN_DIR . 'arsol-plugin-boilerplate.php', 'flush_rewrite_rules');

@@ -22,8 +22,6 @@ if (!defined('ABSPATH')) {
 // Define plugin constants
 define('ARSOL_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ARSOL_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('ARSOL_PLUGIN_VERSION', '1.0.0');
 
 // Load plugin setup
 require_once ARSOL_PLUGIN_DIR . 'includes/setup.php';
-
