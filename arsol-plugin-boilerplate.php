@@ -27,9 +27,3 @@ define('ARSOL_PLUGIN_VERSION', '1.0.0');
 // Load plugin setup
 require_once ARSOL_PLUGIN_DIR . 'includes/setup.php';
 
-// Initialize plugin
-add_action('plugins_loaded', 'arsol_plugin_init');
-
-// Register activation and deactivation hooks
-register_activation_hook(__FILE__, 'arsol_plugin_activate');
-register_deactivation_hook(__FILE__, 'arsol_plugin_deactivate');
