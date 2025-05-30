@@ -1,5 +1,5 @@
 <?php
-namespace ArsolPluginBoilerplate\Classes;
+namespace ArsolPluginBoilerplate\Classes\Core;
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * Class Assets
  * Handles loading of CSS and JS assets
  *
- * @package ArsolPluginBoilerplate\Classes
+ * @package ArsolPluginBoilerplate\Classes\Core
  */
 class Assets {
     /**
@@ -29,18 +29,16 @@ class Assets {
      * Constructor
      */
     public function __construct() {
-        $this->plugin_path = ARSOL_PLUGIN_PATH;
-        $this->plugin_url = ARSOL_PLUGIN_URL;
+        $this->plugin_path = plugin_dir_path(dirname(dirname(__FILE__)));
+        $this->plugin_url = plugin_dir_url(dirname(dirname(__FILE__)));
+        $this->init();
     }
 
     /**
-     * Register hooks
+     * Initialize
      */
-    public function register() {
-        // Admin assets
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
-        
-        // Frontend assets
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
     }
 
@@ -48,61 +46,44 @@ class Assets {
      * Enqueue admin assets
      */
     public function enqueue_admin_assets() {
-        // Only load on plugin pages
-        if (!$this->is_plugin_page()) {
-            return;
-        }
-
-        // Admin CSS
+        // Enqueue admin styles
         wp_enqueue_style(
-            'arsol-plugin-admin',
-            $this->plugin_url . 'assets/css/arsol-plugin-boilerplate-admin.css',
+            'arsol-plugin-boilerplate-admin',
+            $this->plugin_url . 'assets/css/admin.css',
             [],
             ARSOL_PLUGIN_VERSION
         );
 
-        // Admin JS
+        // Enqueue admin scripts
         wp_enqueue_script(
-            'arsol-plugin-admin',
-            $this->plugin_url . 'assets/js/arsol-plugin-boilerplate-admin.js',
+            'arsol-plugin-boilerplate-admin',
+            $this->plugin_url . 'assets/js/admin.js',
             ['jquery'],
             ARSOL_PLUGIN_VERSION,
             true
         );
-
-        // Localize script
-        wp_localize_script('arsol-plugin-admin', 'arsolPluginAdmin', [
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('arsol-plugin-admin-nonce'),
-        ]);
     }
 
     /**
      * Enqueue frontend assets
      */
     public function enqueue_frontend_assets() {
-        // Frontend CSS
+        // Enqueue frontend styles
         wp_enqueue_style(
-            'arsol-plugin-frontend',
-            $this->plugin_url . 'assets/css/arsol-plugin-boilerplate-frontend.css',
+            'arsol-plugin-boilerplate-frontend',
+            $this->plugin_url . 'assets/css/frontend.css',
             [],
             ARSOL_PLUGIN_VERSION
         );
 
-        // Frontend JS
+        // Enqueue frontend scripts
         wp_enqueue_script(
-            'arsol-plugin-frontend',
-            $this->plugin_url . 'assets/js/arsol-plugin-boilerplate-frontend.js',
+            'arsol-plugin-boilerplate-frontend',
+            $this->plugin_url . 'assets/js/frontend.js',
             ['jquery'],
             ARSOL_PLUGIN_VERSION,
             true
         );
-
-        // Localize script
-        wp_localize_script('arsol-plugin-frontend', 'arsolPluginFrontend', [
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('arsol-plugin-frontend-nonce'),
-        ]);
     }
 
     /**

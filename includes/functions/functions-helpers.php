@@ -2,7 +2,7 @@
 /**
  * Helper functions
  *
- * @package ArsolSaasForWoo
+ * @package ArsolPluginBoilerplate
  */
 
 // Exit if accessed directly
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
  * @return mixed
  */
 function arsol_get_setting($key, $default = '') {
-    $settings = get_option('arsol_saas_settings', []);
+    $settings = get_option('arsol_plugin_settings', []);
     return isset($settings[$key]) ? $settings[$key] : $default;
 }
 
@@ -30,7 +30,7 @@ function arsol_get_setting($key, $default = '') {
  * @return bool
  */
 function arsol_update_setting($key, $value) {
-    $settings = get_option('arsol_saas_settings', []);
+    $settings = get_option('arsol_plugin_settings', []);
     $settings[$key] = $value;
-    return update_option('arsol_saas_settings', $settings);
+    return update_option('arsol_plugin_settings', $settings);
 } 

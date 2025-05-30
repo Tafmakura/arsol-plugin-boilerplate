@@ -1,5 +1,5 @@
 <?php
-namespace ArsolPluginBoilerplate;
+namespace ArsolPluginBoilerplate\Classes\Core;
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
@@ -8,28 +8,35 @@ if (!defined('ABSPATH')) {
 
 class Plugin {
     /**
-     * Singleton instance
+     * Plugin instance
      * @var Plugin
      */
     private static $instance = null;
 
     /**
-     * Get singleton instance
-     * @return Plugin
+     * Admin instance
+     * @var \ArsolPluginBoilerplate\Classes\Admin\Admin
      */
-    public static function instance() {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
+    private $admin;
+
+    /**
+     * Shortcodes instance
+     * @var \ArsolPluginBoilerplate\Classes\Frontend\Shortcodes
+     */
+    private $shortcodes;
+
+    /**
+     * Assets instance
+     * @var \ArsolPluginBoilerplate\Classes\Core\Assets
+     */
+    private $assets;
 
     /**
      * Constructor
      */
     private function __construct() {
         $this->define_constants();
-        add_action('plugins_loaded', [$this, 'init_plugin']);
+        $this->init_hooks();
     }
 
     /**
@@ -42,21 +49,19 @@ class Plugin {
     }
 
     /**
-     * Initialize plugin
+     * Initialize hooks
      */
-    public function init_plugin() {
-        // Initialize setup
-        Setup::init();
-
-        // Initialize assets
-        $assets = new \ArsolPluginBoilerplate\Classes\Assets();
-        $assets->register();
-
+    private function init_hooks() {
         // Initialize admin
         if (is_admin()) {
-            $admin = new \ArsolPluginBoilerplate\Classes\Admin();
-            $admin->register();
+            $this->admin = new \ArsolPluginBoilerplate\Classes\Admin\Admin();
         }
+
+        // Initialize shortcodes
+        $this->shortcodes = new \ArsolPluginBoilerplate\Classes\Frontend\Shortcodes();
+
+        // Initialize assets
+        $this->assets = new \ArsolPluginBoilerplate\Classes\Core\Assets();
     }
 
     /**
@@ -71,5 +76,40 @@ class Plugin {
      */
     public static function deactivate() {
         // Deactivation logic here
+    }
+
+    /**
+     * Get plugin instance
+     * @return Plugin
+     */
+    public static function get_instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
+     * Get admin instance
+     * @return \ArsolPluginBoilerplate\Classes\Admin\Admin
+     */
+    public function get_admin() {
+        return $this->admin;
+    }
+
+    /**
+     * Get shortcodes instance
+     * @return \ArsolPluginBoilerplate\Classes\Frontend\Shortcodes
+     */
+    public function get_shortcodes() {
+        return $this->shortcodes;
+    }
+
+    /**
+     * Get assets instance
+     * @return \ArsolPluginBoilerplate\Classes\Core\Assets
+     */
+    public function get_assets() {
+        return $this->assets;
     }
 } 

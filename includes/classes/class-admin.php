@@ -1,5 +1,5 @@
 <?php
-namespace ArsolSaasForWoo\Classes;
+namespace ArsolPluginBoilerplate\Classes\Admin;
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
@@ -14,63 +14,40 @@ class Admin {
     private $plugin_path;
 
     /**
+     * Hello World instance
+     * @var HelloWorld
+     */
+    private $hello_world;
+
+    /**
      * Constructor
      */
     public function __construct() {
-        $this->plugin_path = ARSOL_SAAS_PLUGIN_DIR;
+        $this->plugin_path = plugin_dir_path(dirname(dirname(__FILE__)));
+        $this->init();
     }
 
     /**
-     * Register hooks
+     * Initialize
      */
-    public function register() {
-        add_action('admin_menu', [$this, 'add_admin_menu']);
+    public function init() {
+        add_action('admin_menu', [$this, 'add_menu_pages']);
+        $this->hello_world = new HelloWorld();
     }
 
     /**
-     * Add admin menu items
+     * Add menu pages
      */
-    public function add_admin_menu() {
+    public function add_menu_pages() {
         add_menu_page(
-            __('ARSOL SaaS', 'arsol-saas-for-woo-subscriptions'),
-            __('ARSOL SaaS', 'arsol-saas-for-woo-subscriptions'),
+            __('ARSOL Plugin', 'arsol-plugin-boilerplate'),
+            __('ARSOL Plugin', 'arsol-plugin-boilerplate'),
             'manage_options',
-            'arsol-saas',
-            [$this, 'render_dashboard_page'],
-            'dashicons-admin-generic'
+            'arsol-plugin',
+            [$this->hello_world, 'render_page'],
+            'dashicons-admin-generic',
+            30
         );
-
-        add_submenu_page(
-            'arsol-saas',
-            __('Dashboard', 'arsol-saas-for-woo-subscriptions'),
-            __('Dashboard', 'arsol-saas-for-woo-subscriptions'),
-            'manage_options',
-            'arsol-saas',
-            [$this, 'render_dashboard_page']
-        );
-
-        add_submenu_page(
-            'arsol-saas',
-            __('Settings', 'arsol-saas-for-woo-subscriptions'),
-            __('Settings', 'arsol-saas-for-woo-subscriptions'),
-            'manage_options',
-            'arsol-saas-settings',
-            [$this, 'render_settings_page']
-        );
-    }
-
-    /**
-     * Render dashboard page
-     */
-    public function render_dashboard_page() {
-        $this->get_template('admin/dashboard.php');
-    }
-
-    /**
-     * Render settings page
-     */
-    public function render_settings_page() {
-        $this->get_template('admin/settings.php');
     }
 
     /**
