@@ -65,7 +65,7 @@ class HelloWorld {
         add_menu_page(
             __('Hello World', 'arsol-plugin-boilerplate'),
             __('Hello World', 'arsol-plugin-boilerplate'),
-            'manage_options',
+            'edit_posts',
             'arsol-hello-world',
             [$this, 'render_page'],
             'dashicons-admin-generic',
@@ -119,7 +119,7 @@ class HelloWorld {
             return;
         }
 
-        if (!current_user_can('manage_options')) {
+        if (!current_user_can('edit_posts')) {
             return;
         }
 

@@ -7,51 +7,27 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Assets class
+ * Assets Class
+ *
+ * @package ArsolPluginBoilerplate\Classes\Core
  */
 class Assets {
     /**
      * Assets instance
+     *
      * @var Assets
      */
     private static $instance = null;
 
     /**
-     * Constructor
+     * Plugin path
+     * @var string
      */
-    private function __construct() {
-        $this->init_hooks();
-    }
-
-    /**
-     * Initialize hooks
-     */
-    private function init_hooks() {
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-    }
-
-    /**
-     * Enqueue frontend scripts
-     */
-    public function enqueue_scripts() {
-        wp_enqueue_style(
-            'arsol-plugin',
-            ARSOL_PLUGIN_URL . 'assets/css/frontend.css',
-            array(),
-            ARSOL_PLUGIN_VERSION
-        );
-
-        wp_enqueue_script(
-            'arsol-plugin',
-            ARSOL_PLUGIN_URL . 'assets/js/frontend.js',
-            array('jquery'),
-            ARSOL_PLUGIN_VERSION,
-            true
-        );
-    }
+    private $plugin_path;
 
     /**
      * Get assets instance
+     *
      * @return Assets
      */
     public static function get_instance() {
@@ -59,5 +35,54 @@ class Assets {
             self::$instance = new self();
         }
         return self::$instance;
+    }
+
+    /**
+     * Constructor
+     */
+    private function __construct() {
+        $this->plugin_path = plugin_dir_path(dirname(dirname(dirname(__FILE__))));
+        $this->init_hooks();
+    }
+
+    /**
+     * Initialize hooks
+     */
+    private function init_hooks() {
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
+    }
+
+    /**
+     * Get file version based on last modified time
+     * 
+     * @param string $file_path Path to the file
+     * @return string|bool File modification time or false if file doesn't exist
+     */
+    private function get_file_version($file_path) {
+        $full_path = $this->plugin_path . $file_path;
+        return file_exists($full_path) ? filemtime($full_path) : false;
+    }
+
+    /**
+     * Enqueue scripts
+     */
+    public function enqueue_scripts() {
+        $css_version = $this->get_file_version('assets/css/public.css');
+        $js_version = $this->get_file_version('assets/js/public.js');
+
+        wp_enqueue_style(
+            'arsol-plugin',
+            \ARSOL_PLUGIN_URL . 'assets/css/public.css',
+            array(),
+            $css_version
+        );
+
+        wp_enqueue_script(
+            'arsol-plugin',
+            \ARSOL_PLUGIN_URL . 'assets/js/public.js',
+            array('jquery'),
+            $js_version,
+            true
+        );
     }
 } 
