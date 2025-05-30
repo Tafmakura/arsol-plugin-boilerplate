@@ -7,12 +7,16 @@
 
 namespace ArsolPluginBoilerplate\Classes\Core;
 
+// Exit if accessed directly
 if (!defined('ABSPATH')) {
     exit;
 }
 
 /**
  * Class Autoloader
+ * Handles autoloading of plugin classes
+ *
+ * @package ArsolPluginBoilerplate\Classes\Core
  */
 class Autoloader {
     /**
