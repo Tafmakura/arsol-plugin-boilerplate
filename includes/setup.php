@@ -10,11 +10,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Load autoloaders
-require_once ARSOL_PLUGIN_DIR . 'includes/classes/class-autoloader.php';
+// Load functions
 require_once ARSOL_PLUGIN_DIR . 'includes/functions/functions-autoloader.php';
 
-\ArsolPluginBoilerplate\Classes\Core\Autoloader::register();
+// Load and initialize setup
+require_once ARSOL_PLUGIN_DIR . 'includes/classes/class-setup.php';
+\ArsolPluginBoilerplate\Classes\Setup::get_instance();
 
 /**
  * Initialize plugin
@@ -24,7 +25,6 @@ function arsol_plugin_init() {
     load_plugin_textdomain('arsol-plugin-boilerplate', false, dirname(plugin_basename(ARSOL_PLUGIN_DIR)) . '/languages');
 }
 add_action('plugins_loaded', 'arsol_plugin_init');
-
 
 /**
  * Plugin activation/deactivation hooks

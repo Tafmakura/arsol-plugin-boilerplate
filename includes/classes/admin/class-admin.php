@@ -7,11 +7,14 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Admin class
+ * Admin Class
+ *
+ * @package ArsolPluginBoilerplate\Classes\Admin
  */
 class Admin {
     /**
      * Admin instance
+     *
      * @var Admin
      */
     private static $instance = null;
@@ -29,6 +32,18 @@ class Admin {
     private $hello_world;
 
     /**
+     * Get admin instance
+     *
+     * @return Admin
+     */
+    public static function get_instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
      * Constructor
      */
     private function __construct() {
@@ -40,62 +55,51 @@ class Admin {
      * Initialize hooks
      */
     private function init_hooks() {
-        add_action('admin_menu', array($this, 'add_admin_menu'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+        add_action('admin_menu', [$this, 'add_menu_pages']);
+        add_action('admin_init', [$this, 'handle_form_submission']);
         $this->hello_world = new HelloWorld();
     }
 
     /**
-     * Add admin menu
+     * Add menu pages
      */
-    public function add_admin_menu() {
+    public function add_menu_pages() {
         add_menu_page(
             __('ARSOL Plugin', 'arsol-plugin-boilerplate'),
             __('ARSOL Plugin', 'arsol-plugin-boilerplate'),
             'manage_options',
             'arsol-plugin',
-            array($this, 'render_admin_page'),
+            [$this, 'render_page'],
             'dashicons-admin-generic',
             30
         );
     }
 
     /**
-     * Enqueue admin scripts
+     * Handle form submission
      */
-    public function enqueue_scripts() {
-        wp_enqueue_style(
-            'arsol-plugin-admin',
-            ARSOL_PLUGIN_URL . 'assets/css/admin.css',
-            array(),
-            ARSOL_PLUGIN_VERSION
-        );
+    public function handle_form_submission() {
+        if (!isset($_POST['arsol_hello_world_nonce']) || !wp_verify_nonce($_POST['arsol_hello_world_nonce'], 'arsol_hello_world_save')) {
+            return;
+        }
 
-        wp_enqueue_script(
-            'arsol-plugin-admin',
-            ARSOL_PLUGIN_URL . 'assets/js/admin.js',
-            array('jquery'),
-            ARSOL_PLUGIN_VERSION,
-            true
-        );
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        if (isset($_POST['arsol_hello_world_message'])) {
+            $message = sanitize_text_field($_POST['arsol_hello_world_message']);
+            update_option('arsol_hello_world_message', $message);
+            wp_redirect(add_query_arg('settings-updated', 'true'));
+            exit;
+        }
     }
 
     /**
      * Render admin page
      */
-    public function render_admin_page() {
-        require_once ARSOL_PLUGIN_DIR . 'includes/admin/views/admin-page.php';
-    }
-
-    /**
-     * Get admin instance
-     * @return Admin
-     */
-    public static function get_instance() {
-        if (null === self::$instance) {
-            self::$instance = new self();
-        }
-        return self::$instance;
+    public function render_page() {
+        require_once ARSOL_PLUGIN_DIR . 'includes/ui/templates/admin/hello-world.php';
     }
 
     /**
