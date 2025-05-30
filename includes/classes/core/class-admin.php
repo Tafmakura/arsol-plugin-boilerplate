@@ -43,6 +43,7 @@ class Admin {
      */
     private function init_hooks() {
         add_action('admin_menu', [$this, 'add_menu_pages']);
+        add_action('admin_init', [$this, 'handle_form_submission']);
     }
 
     /**
@@ -58,6 +59,26 @@ class Admin {
             'dashicons-admin-generic',
             30
         );
+    }
+
+    /**
+     * Handle form submission
+     */
+    public function handle_form_submission() {
+        if (!isset($_POST['arsol_hello_world_nonce']) || !wp_verify_nonce($_POST['arsol_hello_world_nonce'], 'arsol_hello_world_save')) {
+            return;
+        }
+
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        if (isset($_POST['arsol_hello_world_message'])) {
+            $message = sanitize_text_field($_POST['arsol_hello_world_message']);
+            update_option('arsol_hello_world_message', $message);
+            wp_redirect(add_query_arg('settings-updated', 'true'));
+            exit;
+        }
     }
 
     /**

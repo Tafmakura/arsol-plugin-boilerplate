@@ -23,12 +23,19 @@ $saved_message = get_option('arsol_hello_world_message', '');
         </div>
     <?php endif; ?>
 
-    <form method="post" action="options.php">
-        <?php 
-        settings_fields($option_group);
-        do_settings_sections('arsol_hello_world_options');
-        submit_button();
-        ?>
+    <form method="post" action="">
+        <?php wp_nonce_field('arsol_hello_world_save', 'arsol_hello_world_nonce'); ?>
+        <table class="form-table">
+            <tr>
+                <th scope="row">
+                    <label for="arsol_hello_world_message"><?php echo esc_html__('Message', 'arsol-plugin-boilerplate'); ?></label>
+                </th>
+                <td>
+                    <input type="text" id="arsol_hello_world_message" name="arsol_hello_world_message" value="<?php echo esc_attr($saved_message); ?>" class="regular-text">
+                </td>
+            </tr>
+        </table>
+        <?php submit_button(); ?>
     </form>
 
     <?php if ($saved_message) : ?>
