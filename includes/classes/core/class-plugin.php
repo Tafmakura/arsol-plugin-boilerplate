@@ -51,7 +51,7 @@ class Plugin {
     private function init_hooks() {
         // Initialize admin
         if (is_admin()) {
-            $this->admin = new Admin();
+            $this->admin = Admin::get_instance();
         }
     }
 
