@@ -22,17 +22,11 @@ if (!defined('ABSPATH')) {
 // Load plugin setup
 require_once plugin_dir_path(__FILE__) . 'includes/setup.php';
 
-// Autoloader
-require_once plugin_dir_path(__FILE__) . 'includes/classes/class-autoloader.php';
-
-// Load functions
-require_once plugin_dir_path(__FILE__) . 'includes/functions/functions.php';
-
 // Initialize main plugin class
 add_action('plugins_loaded', function() {
-    \ArsolPluginBoilerplate\Plugin::instance();
+    \ArsolPluginBoilerplate\Classes\Core\Plugin::get_instance();
 });
 
 // Register activation and deactivation hooks
-register_activation_hook(__FILE__, ['\ArsolPluginBoilerplate\Plugin', 'activate']);
-register_deactivation_hook(__FILE__, ['\ArsolPluginBoilerplate\Plugin', 'deactivate']);
+register_activation_hook(__FILE__, ['\ArsolPluginBoilerplate\Classes\Core\Plugin', 'activate']);
+register_deactivation_hook(__FILE__, ['\ArsolPluginBoilerplate\Classes\Core\Plugin', 'deactivate']);
