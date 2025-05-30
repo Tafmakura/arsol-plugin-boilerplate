@@ -50,9 +50,15 @@ class Plugin {
      * Define plugin constants
      */
     private function define_constants() {
-        define('ARSOL_PLUGIN_VERSION', '1.0.0');
-        define('ARSOL_PLUGIN_PATH', plugin_dir_path(dirname(dirname(dirname(__FILE__))))); // points to plugin root
-        define('ARSOL_PLUGIN_URL', plugin_dir_url(dirname(dirname(dirname(__FILE__))))); // points to plugin root
+        if (!defined('ARSOL_PLUGIN_VERSION')) {
+            define('ARSOL_PLUGIN_VERSION', '1.0.0');
+        }
+        if (!defined('ARSOL_PLUGIN_PATH')) {
+            define('ARSOL_PLUGIN_PATH', plugin_dir_path(dirname(dirname(dirname(__FILE__)))));
+        }
+        if (!defined('ARSOL_PLUGIN_URL')) {
+            define('ARSOL_PLUGIN_URL', plugin_dir_url(dirname(dirname(dirname(__FILE__)))));
+        }
     }
 
     /**
