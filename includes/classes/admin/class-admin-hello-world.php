@@ -8,6 +8,12 @@ if (!defined('ABSPATH')) {
 
 class HelloWorld {
     /**
+     * HelloWorld instance
+     * @var HelloWorld
+     */
+    private static $instance = null;
+
+    /**
      * Plugin path
      * @var string
      */
@@ -26,9 +32,20 @@ class HelloWorld {
     private $page = 'arsol_hello_world_options';
 
     /**
+     * Get HelloWorld instance
+     * @return HelloWorld
+     */
+    public static function get_instance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
      * Constructor
      */
-    public function __construct() {
+    private function __construct() {
         $this->plugin_path = plugin_dir_path(dirname(dirname(dirname(__FILE__))));
         $this->init();
     }
@@ -37,7 +54,23 @@ class HelloWorld {
      * Initialize
      */
     public function init() {
+        add_action('admin_menu', [$this, 'add_menu_page']);
         add_action('admin_init', [$this, 'register_settings']);
+    }
+
+    /**
+     * Add menu page
+     */
+    public function add_menu_page() {
+        add_menu_page(
+            __('Hello World', 'arsol-plugin-boilerplate'),
+            __('Hello World', 'arsol-plugin-boilerplate'),
+            'manage_options',
+            'arsol-hello-world',
+            [$this, 'render_page'],
+            'dashicons-admin-generic',
+            30
+        );
     }
 
     /**
@@ -76,6 +109,26 @@ class HelloWorld {
                 'class' => 'arsol-hello-world-field',
             ]
         );
+    }
+
+    /**
+     * Handle form submission
+     */
+    public function handle_form_submission() {
+        if (!isset($_POST['arsol_hello_world_nonce']) || !wp_verify_nonce($_POST['arsol_hello_world_nonce'], 'arsol_hello_world_save')) {
+            return;
+        }
+
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        if (isset($_POST['arsol_hello_world_message'])) {
+            $message = sanitize_text_field($_POST['arsol_hello_world_message']);
+            update_option('arsol_hello_world_message', $message);
+            wp_redirect(add_query_arg('settings-updated', 'true'));
+            exit;
+        }
     }
 
     /**
@@ -118,9 +171,7 @@ class HelloWorld {
      * Render page
      */
     public function render_page() {
-        $this->get_template('admin/hello-world.php', [
-            'option_group' => $this->option_group,
-        ]);
+        require_once ARSOL_PLUGIN_DIR . 'includes/ui/templates/admin/hello-world.php';
     }
 
     /**
