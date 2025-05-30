@@ -11,7 +11,7 @@
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * 
- * @package ARSOL_Plugin_Boilerplate
+ * @package ArsolPluginBoilerplate
  */
 
 // Exit if accessed directly
@@ -24,9 +24,9 @@ require_once plugin_dir_path(__FILE__) . 'includes/setup.php';
 
 // Initialize main plugin class
 add_action('plugins_loaded', function() {
-    Arsol_Plugin_Boilerplate::get_instance();
+    \ArsolPluginBoilerplate\Classes\Core\Plugin::get_instance();
 });
 
 // Register activation and deactivation hooks
-register_activation_hook(__FILE__, ['Arsol_Plugin_Boilerplate', 'activate']);
-register_deactivation_hook(__FILE__, ['Arsol_Plugin_Boilerplate', 'deactivate']);
+register_activation_hook(__FILE__, [\ArsolPluginBoilerplate\Classes\Core\Plugin::class, 'activate']);
+register_deactivation_hook(__FILE__, [\ArsolPluginBoilerplate\Classes\Core\Plugin::class, 'deactivate']);
