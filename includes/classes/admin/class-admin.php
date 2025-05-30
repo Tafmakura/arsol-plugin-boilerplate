@@ -53,21 +53,35 @@ class Admin {
     }
 
     /**
+     * Get file version based on last modified time
+     * 
+     * @param string $file_path Path to the file
+     * @return string|bool File modification time or false if file doesn't exist
+     */
+    private function get_file_version($file_path) {
+        $full_path = $this->plugin_path . $file_path;
+        return file_exists($full_path) ? filemtime($full_path) : false;
+    }
+
+    /**
      * Enqueue admin scripts
      */
     public function enqueue_scripts() {
+        $css_version = $this->get_file_version('assets/css/admin.css');
+        $js_version = $this->get_file_version('assets/js/admin.js');
+
         wp_enqueue_style(
             'arsol-plugin-admin',
-            ARSOL_PLUGIN_URL . 'assets/css/admin.css',
+            \ARSOL_PLUGIN_URL . 'assets/css/admin.css',
             array(),
-            ARSOL_PLUGIN_VERSION
+            $css_version
         );
 
         wp_enqueue_script(
             'arsol-plugin-admin',
-            ARSOL_PLUGIN_URL . 'assets/js/admin.js',
+            \ARSOL_PLUGIN_URL . 'assets/js/admin.js',
             array('jquery'),
-            ARSOL_PLUGIN_VERSION,
+            $js_version,
             true
         );
     }
