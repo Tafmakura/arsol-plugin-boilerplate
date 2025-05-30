@@ -22,9 +22,68 @@ class Plugin {
     /**
      * Admin instance
      *
-     * @var Admin
+     * @var \ArsolPluginBoilerplate\Classes\Admin\Admin
      */
     private $admin;
+
+    /**
+     * Shortcodes instance
+     * @var \ArsolPluginBoilerplate\Classes\Frontend\Shortcodes
+     */
+    private $shortcodes;
+
+    /**
+     * Assets instance
+     * @var \ArsolPluginBoilerplate\Classes\Core\Assets
+     */
+    private $assets;
+
+    /**
+     * Constructor
+     */
+    private function __construct() {
+        $this->define_constants();
+        $this->init_hooks();
+    }
+
+    /**
+     * Define plugin constants
+     */
+    private function define_constants() {
+        define('ARSOL_PLUGIN_VERSION', '1.0.0');
+        define('ARSOL_PLUGIN_PATH', plugin_dir_path(dirname(dirname(dirname(__FILE__))))); // points to plugin root
+        define('ARSOL_PLUGIN_URL', plugin_dir_url(dirname(dirname(dirname(__FILE__))))); // points to plugin root
+    }
+
+    /**
+     * Initialize hooks
+     */
+    private function init_hooks() {
+        // Initialize admin
+        if (is_admin()) {
+            $this->admin = new \ArsolPluginBoilerplate\Classes\Admin\Admin();
+        }
+
+        // Initialize shortcodes
+        $this->shortcodes = new \ArsolPluginBoilerplate\Classes\Frontend\Shortcodes();
+
+        // Initialize assets
+        $this->assets = new \ArsolPluginBoilerplate\Classes\Core\Assets();
+    }
+
+    /**
+     * Plugin activation
+     */
+    public static function activate() {
+        // Activation logic here
+    }
+
+    /**
+     * Plugin deactivation
+     */
+    public static function deactivate() {
+        // Deactivation logic here
+    }
 
     /**
      * Get plugin instance
@@ -39,33 +98,29 @@ class Plugin {
     }
 
     /**
-     * Constructor
+     * Get admin instance
+     *
+     * @return \ArsolPluginBoilerplate\Classes\Admin\Admin
      */
-    private function __construct() {
-        $this->init_hooks();
+    public function get_admin() {
+        return $this->admin;
     }
 
     /**
-     * Initialize hooks
+     * Get shortcodes instance
+     *
+     * @return \ArsolPluginBoilerplate\Classes\Frontend\Shortcodes
      */
-    private function init_hooks() {
-        // Initialize admin
-        if (is_admin()) {
-            $this->admin = Admin::get_instance();
-        }
+    public function get_shortcodes() {
+        return $this->shortcodes;
     }
 
     /**
-     * Plugin activation
+     * Get assets instance
+     *
+     * @return \ArsolPluginBoilerplate\Classes\Core\Assets
      */
-    public static function activate() {
-        // Activation tasks
-    }
-
-    /**
-     * Plugin deactivation
-     */
-    public static function deactivate() {
-        // Deactivation tasks
+    public function get_assets() {
+        return $this->assets;
     }
 } 
