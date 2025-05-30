@@ -22,27 +22,30 @@ if (!defined('ABSPATH')) {
 // Define plugin constants
 define('ARSOL_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ARSOL_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('ARSOL_PLUGIN_VERSION', '1.0.0');
 
 // Load autoloader class
 require_once ARSOL_PLUGIN_DIR . 'includes/classes/core/class-autoloader.php';
 
 // Initialize autoloader
-$autoloader = new \ArsolPluginBoilerplate\Classes\Core\Autoloader();
-$autoloader->register();
+\ArsolPluginBoilerplate\Classes\Core\Autoloader::register();
 
 // Load plugin setup
 require_once ARSOL_PLUGIN_DIR . 'includes/setup.php';
 
 // Initialize main plugin class
-add_action('plugins_loaded', function() {
+function arsol_plugin_init() {
     \ArsolPluginBoilerplate\Classes\Core\Plugin::get_instance();
-});
+}
+add_action('plugins_loaded', 'arsol_plugin_init');
 
 // Register activation and deactivation hooks
-register_activation_hook(__FILE__, function() {
+function arsol_plugin_activate() {
     \ArsolPluginBoilerplate\Classes\Core\Plugin::activate();
-});
+}
+register_activation_hook(__FILE__, 'arsol_plugin_activate');
 
-register_deactivation_hook(__FILE__, function() {
+function arsol_plugin_deactivate() {
     \ArsolPluginBoilerplate\Classes\Core\Plugin::deactivate();
-});
+}
+register_deactivation_hook(__FILE__, 'arsol_plugin_deactivate');
