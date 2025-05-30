@@ -1,0 +1,31 @@
+/* Admin Styles */
+.arsol-plugin-admin {
+    margin: 20px;
+}
+
+.arsol-plugin-admin h1 {
+    color: #23282d;
+    margin-bottom: 20px;
+}
+
+.arsol-plugin-admin .form-table th {
+    width: 200px;
+}
+
+.arsol-plugin-admin .form-table td {
+    padding: 15px 10px;
+}
+
+.arsol-plugin-admin .form-table input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Images */
+.arsol-plugin-admin .icon {
+    background-image: url('../images/icon.png');
+}
+
+.arsol-plugin-admin .logo {
+    background-image: url('../images/logo.png');
+} 

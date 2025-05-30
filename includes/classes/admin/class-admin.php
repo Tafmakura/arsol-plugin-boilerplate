@@ -67,19 +67,19 @@ class Admin {
      * Enqueue admin scripts
      */
     public function enqueue_scripts() {
-        $css_version = $this->get_file_version('assets/css/admin.css');
-        $js_version = $this->get_file_version('assets/js/admin.js');
+        $css_version = $this->get_file_version('assets/css/arsol-plugin-boilerplate-admin.css');
+        $js_version = $this->get_file_version('assets/js/arsol-plugin-boilerplate-admin.js');
 
         wp_enqueue_style(
             'arsol-plugin-admin',
-            \ARSOL_PLUGIN_URL . 'assets/css/admin.css',
+            \ARSOL_PLUGIN_URL . 'assets/css/arsol-plugin-boilerplate-admin.css',
             array(),
             $css_version
         );
 
         wp_enqueue_script(
             'arsol-plugin-admin',
-            \ARSOL_PLUGIN_URL . 'assets/js/admin.js',
+            \ARSOL_PLUGIN_URL . 'assets/js/arsol-plugin-boilerplate-admin.js',
             array('jquery'),
             $js_version,
             true

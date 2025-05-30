@@ -1,0 +1,27 @@
+/* Public Styles */
+.arsol-plugin {
+    margin: 20px 0;
+    padding: 20px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.arsol-plugin h2 {
+    color: #23282d;
+    margin-bottom: 15px;
+}
+
+.arsol-plugin p {
+    margin: 0 0 15px;
+    line-height: 1.6;
+}
+
+/* Images */
+.arsol-plugin .icon {
+    background-image: url('../images/icon.png');
+}
+
+.arsol-plugin .logo {
+    background-image: url('../images/logo.png');
+} 
